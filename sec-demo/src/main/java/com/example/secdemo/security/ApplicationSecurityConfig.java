@@ -26,18 +26,33 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated().and().httpBasic();
+        http.authorizeRequests()
+        .antMatchers("/").permitAll()
+        .antMatchers("/api/**").hasRole(STUDENT.name())
+        .anyRequest().authenticated().and().httpBasic();
     }
 
     @Override
     @Bean
     protected UserDetailsService userDetailsService() {
-        UserDetails tamber = User.builder().username("tamber").password(passwordEncoder.encode("tamber"))
-                .roles(STUDENT.name()).build(); // ROLE_STUDENT
+        UserDetails tamber = User.builder()
+                            .username("tamber")
+                            .password(passwordEncoder.encode("tamber"))
+                            .roles(STUDENT.name())
+                            .build(); // ROLE_STUDENT
 
-        UserDetails admin = User.builder().username("admin").password(passwordEncoder.encode("admin"))
-                .roles(ADMIN.name()).build(); // ROLE_ADMIN
+        UserDetails admin = User.builder()
+                                .username("admin")
+                                .password(passwordEncoder.encode("admin"))
+                                .roles(ADMIN.name())
+                                .build(); // ROLE_ADMIN
 
-        return new InMemoryUserDetailsManager(tamber, admin);
+        UserDetails admintrainee = User.builder()
+                                .username("admintrainee")
+                                .password(passwordEncoder.encode("admintrainee"))
+                                .roles(ADMINTRAINEE.name())
+                                .build(); // ROLE_ADMIN
+
+        return new InMemoryUserDetailsManager(tamber, admin, admintrainee);
     }
 }
