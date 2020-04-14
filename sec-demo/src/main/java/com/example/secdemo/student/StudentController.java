@@ -12,8 +12,10 @@ import java.util.List;
 @RequestMapping("api/v1/students")
 public class StudentController {
 
-    private static final List<Student> STUDENTS = Arrays.asList(new Student(1, "lol A"), new Student(2, "AAA B"),
-            new Student(3, "KKK OOO"));
+    private static final List<Student> STUDENTS = Arrays.asList(
+        new Student(1, "lol A"), 
+        new Student(2, "AAA B"),
+        new Student(3, "KKK OOO"));
 
     @GetMapping(path = "{studentId}")
     public Student getStudent(@PathVariable("studentId") Integer studentId) {
