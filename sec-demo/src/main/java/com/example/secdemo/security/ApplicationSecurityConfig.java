@@ -32,10 +32,10 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         .authorizeRequests()
         .antMatchers("/").permitAll()
         .antMatchers("/api/**").hasRole(STUDENT.name())
-        .antMatchers(HttpMethod.DELETE,"/managemenet/api/**").hasAuthority(COURSE_WRITE.name())
-        .antMatchers(HttpMethod.POST,"/managemenet/api/**").hasAuthority(COURSE_WRITE.name())
-        .antMatchers(HttpMethod.PUT,"/managemenet/api/**").hasAuthority(COURSE_WRITE.name())
-        .antMatchers(HttpMethod.GET,"/managemenet/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
+        .antMatchers(HttpMethod.DELETE,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+        .antMatchers(HttpMethod.POST,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+        .antMatchers(HttpMethod.PUT,"/management/api/**").hasAuthority(COURSE_WRITE.getPermission())
+        .antMatchers(HttpMethod.GET,"/management/api/**").hasAnyRole(ADMIN.name(), ADMINTRAINEE.name())
         .anyRequest().authenticated().and().httpBasic();
     }
 
@@ -45,19 +45,22 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         UserDetails tamber = User.builder()
                             .username("tamber")
                             .password(passwordEncoder.encode("tamber"))
-                            .roles(STUDENT.name())
+                            .authorities(STUDENT.getGrantedAuthorities())
+                            //.roles(STUDENT.name())
                             .build(); // ROLE_STUDENT
 
         UserDetails admin = User.builder()
                                 .username("admin")
                                 .password(passwordEncoder.encode("admin"))
-                                .roles(ADMIN.name())
+                                .authorities(ADMIN.getGrantedAuthorities())
+                                //.roles(ADMIN.name())
                                 .build(); // ROLE_ADMIN
 
         UserDetails admintrainee = User.builder()
                                 .username("admintrainee")
                                 .password(passwordEncoder.encode("admintrainee"))
-                                .roles(ADMINTRAINEE.name())
+                                .authorities(ADMINTRAINEE.getGrantedAuthorities())
+                                //.roles(ADMINTRAINEE.name())
                                 .build(); // ROLE_ADMINTRAINEE
 
         return new InMemoryUserDetailsManager(tamber, admin, admintrainee);
